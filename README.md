@@ -1,8 +1,6 @@
 # xasset：让 Unity 资源管理更轻松
 
-xasset 提供开箱即用的 Unity 资产打包、分包、加密和边玩边下等技术解决方案，可以让用户更快的开发更流畅的产品。
-
-了解更多 xasset 的产品特性，可以前往 [xasset.cc](https://xasset.cc) 查看。
+xasset 提供开箱即用的 Unity 资产打包、分包、加密和边玩边下等技术解决方案，可以让用户更快的开发更流畅的产品。进一步了解 xasset 的产品特性，可以前往 xasset 的产品官网 [xasset.cc](https://xasset.cc) 查看。
 
 - 产品官网：https://xasset.cc
 - GitHub：https://github.com/xasset/xasset
