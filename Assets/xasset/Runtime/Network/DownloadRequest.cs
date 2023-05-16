@@ -107,7 +107,7 @@ namespace xasset
                 SetResult(Result.Success);
                 return;
             }
-            
+
             file.Delete();
             SetResult(Result.Failed,
                 string.Format(DownloadErrors.DownloadHashMismatch, computeHash, content.hash));

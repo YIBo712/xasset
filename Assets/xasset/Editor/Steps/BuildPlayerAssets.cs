@@ -33,7 +33,7 @@ namespace xasset.editor
 
         public static void StartNew(Versions versions = null)
         {
-            new BuildPlayerAssets {versions = versions}.Start();
+            new BuildPlayerAssets { versions = versions }.Start();
         }
 
         private void Start()
@@ -45,13 +45,13 @@ namespace xasset.editor
                 return;
             }
 
-            var dataPath = $"{Application.streamingAssetsPath}/{Assets.Bundles}";
+            Assets.PlayerDataPath = $"{Application.streamingAssetsPath}/{Assets.Bundles}";
             var settings = Settings.GetDefaultSettings();
             var playerAssets = settings.GetPlayerAssets();
-            if (Directory.Exists(dataPath))
+            if (Directory.Exists(Assets.PlayerDataPath))
             {
-                FileUtil.DeleteFileOrDirectory(dataPath);
-                FileUtil.DeleteFileOrDirectory($"{dataPath}.meta");
+                FileUtil.DeleteFileOrDirectory(Assets.PlayerDataPath);
+                FileUtil.DeleteFileOrDirectory($"{Assets.PlayerDataPath}.meta");
             }
 
             var bundles = Builder.GetBundlesInBuild(settings, versions);

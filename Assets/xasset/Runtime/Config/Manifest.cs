@@ -61,7 +61,10 @@ namespace xasset
 
         private readonly Dictionary<string, List<int>> directoryWithAssets = new Dictionary<string, List<int>>();
         private readonly Dictionary<string, ManifestAsset> addressWithAssets = new Dictionary<string, ManifestAsset>();
-        private readonly Dictionary<string, ManifestBundle[]> nameWithDependencies = new Dictionary<string, ManifestBundle[]>();
+
+        private readonly Dictionary<string, ManifestBundle[]> nameWithDependencies =
+            new Dictionary<string, ManifestBundle[]>();
+
         private readonly Dictionary<string, ManifestBundle> nameWithBundles = new Dictionary<string, ManifestBundle>();
 
         public void Clear()
@@ -163,7 +166,7 @@ namespace xasset
             }
 
             addressWithAssets[asset.path] = asset;
-            OnReadAsset?.Invoke(asset); 
+            OnReadAsset?.Invoke(asset);
         }
 
         public bool IsDirectory(string path)
@@ -180,7 +183,7 @@ namespace xasset
         {
             return addressWithAssets.TryGetValue(path, out asset);
         }
-        
+
         public ManifestBundle GetBundle(string assetPath)
         {
             return nameWithBundles.TryGetValue(assetPath, out var bundle) ? bundle : null;
@@ -194,7 +197,9 @@ namespace xasset
         public ManifestBundle[] GetDependencies(ManifestBundle bundle)
         {
             if (nameWithDependencies.TryGetValue(bundle.name, out var value)) return value;
-            value = bundle.deps == null ? Array.Empty<ManifestBundle>() : Array.ConvertAll(bundle.deps, input => bundles[input]);
+            value = bundle.deps == null
+                ? Array.Empty<ManifestBundle>()
+                : Array.ConvertAll(bundle.deps, input => bundles[input]);
             nameWithDependencies[bundle.name] = value;
             return value;
         }

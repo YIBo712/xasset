@@ -12,6 +12,6 @@ namespace xasset.editor
         public long lastWriteTime;
         public AddressMode addressMode = AddressMode.LoadByPath;
         public string[] dependencies = Array.Empty<string>();
-        public BuildGroup group;
+        public Group group;
     }
 }

@@ -105,14 +105,14 @@ namespace xasset
 
             request.LoadAsync();
             return request;
-        } 
-        
+        }
+
         public void ReloadAsync()
         {
             status = Status.Processing;
             handler.OnReload(this);
         }
-        
+
         public Action reloaded { get; set; }
 
         public void OnReloaded()

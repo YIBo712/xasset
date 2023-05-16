@@ -25,7 +25,7 @@ namespace xasset
         protected override void OnWaitForCompletion()
         {
             handler.WaitForCompletion(this);
-        } 
+        }
 
         public void LoadAssetBundle(string filename)
         {
@@ -84,9 +84,8 @@ namespace xasset
         {
             var bundle = request.info;
             var handler = CreateHandler?.Invoke(request);
-            if (handler != null) return handler; 
-            if (Assets.IsWebGLPlatform && !Application.isEditor)
-                return new RuntimeDownloadBundleHandler();
+            if (handler != null) return handler;
+            
             if (Assets.IsPlayerAsset(bundle.hash))
                 return new RuntimeLocalBundleHandler
                 {

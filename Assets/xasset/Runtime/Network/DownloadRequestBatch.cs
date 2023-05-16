@@ -93,7 +93,7 @@ namespace xasset
             {
                 // 网络可达才自动 Retry
                 if (Application.internetReachability != NetworkReachability.NotReachable
-                    && _retryTimes < Downloader.MaxRetryTimes)
+                    && _retryTimes < Assets.MaxRetryTimes)
                 {
                     Retry();
                     _retryTimes++;

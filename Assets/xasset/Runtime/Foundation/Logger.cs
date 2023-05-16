@@ -12,11 +12,11 @@ namespace xasset
         Error
     }
 
-    public class Logger
+    public static class Logger
     {
         private const string TAG = "[xasset]";
 
-        public static LogLevel LogLevel = LogLevel.Info;
+        public static LogLevel LogLevel { get; set; } = LogLevel.Debug;
 
         [Conditional("DEBUG")]
         public static void D(object msg, Object context = null)
@@ -41,6 +41,6 @@ namespace xasset
         {
             if (LogLevel <= LogLevel.Warning)
                 Debug.LogWarning($"{TAG} {msg}", context);
-        } 
+        }
     }
 }

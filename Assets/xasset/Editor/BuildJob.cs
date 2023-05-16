@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace xasset.editor
 {
-    public interface IBuildJobStep
+    public interface IBuildStep
     {
         void Start(BuildJob job);
     }
@@ -15,7 +15,7 @@ namespace xasset.editor
         public readonly List<BuildBundle> bundles = new List<BuildBundle>();
         public readonly List<string> changes = new List<string>();
         public string error { get; set; }
-
+        public bool nothingToBuild { get; set; }
         public BuildJob(BuildParameters buildParameters)
         {
             parameters = buildParameters;
@@ -28,14 +28,14 @@ namespace xasset.editor
             bundledAssets.Add(asset);
         }
 
-        public static BuildJob StartNew(BuildParameters parameters, params IBuildJobStep[] steps)
+        public static BuildJob StartNew(BuildParameters parameters, params IBuildStep[] steps)
         {
             var task = new BuildJob(parameters);
             task.Start(steps);
             return task;
         }
 
-        public void Start(params IBuildJobStep[] steps)
+        public void Start(params IBuildStep[] steps)
         {
             foreach (var step in steps)
             {

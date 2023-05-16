@@ -6,7 +6,7 @@ using UnityEditor;
 
 namespace xasset.editor
 {
-    public class BuildBundles : IBuildJobStep
+    public class BuildBundles : IBuildStep
     {
         public void Start(BuildJob job)
         {
@@ -71,10 +71,10 @@ namespace xasset.editor
                     if (info.Exists)
                     {
                         var hash = Utility.ComputeHash(path);
-                        var nameWithAppendHash = $"{hash}{Settings.extension}";
+                        var nameWithAppendHash = $"{hash}{settings.extension}";
                         if (settings.saveBundleName)
                         {
-                            var name = assetBundle.Replace(Settings.extension, string.Empty);
+                            var name = assetBundle.Replace(settings.extension, string.Empty);
                             nameWithAppendHash = $"{name}_{nameWithAppendHash}";
                         }
 

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace xasset.editor
 {
-    public class BuildVersions : IBuildJobStep
+    public class BuildVersions : IBuildStep
     {
         public void Start(BuildJob job)
         {
@@ -66,6 +66,7 @@ namespace xasset.editor
             if (job.changes.Count == 0 && !job.parameters.forceRebuild && job.bundles.Count == getBundles.Count)
             {
                 job.error = "Nothing to build.";
+                job.nothingToBuild = true;
                 return false;
             }
 

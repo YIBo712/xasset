@@ -11,7 +11,7 @@ namespace xasset.editor
         public bool optimizeDependentAssets = true;
         public bool forceRebuild;
         public BuildAssetBundleOptions options = BuildAssetBundleOptions.ChunkBasedCompression;
-        public BuildGroup[] groups;
+        public Group[] groups;
         public string name { get; set; }
     }
 

@@ -21,7 +21,7 @@ namespace xasset
         {
             AllRequests.Add(this);
 
-            if (Assets.SimulationMode || Assets.OfflineMode)
+            if (!Assets.Updatable)
             {
                 SetResult(Result.Success);
                 return;
@@ -88,7 +88,7 @@ namespace xasset
                 Logger.W($"Failed to download versions with error {_contents.error}.");
 
                 if (Application.internetReachability != NetworkReachability.NotReachable
-                    && _retryTimes < Downloader.MaxRetryTimes)
+                    && _retryTimes < Assets.MaxRetryTimes)
                 {
                     _contents.Retry();
                     _retryTimes++;

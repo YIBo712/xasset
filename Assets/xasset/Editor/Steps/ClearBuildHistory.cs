@@ -7,7 +7,7 @@ namespace xasset.editor
     /// <summary>
     ///     清理打包的历史文件
     /// </summary>
-    public static class ClearHistory
+    public static class ClearBuildHistory
     {
         public static void Start()
         {

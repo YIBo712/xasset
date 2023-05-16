@@ -10,8 +10,8 @@ namespace xasset.tests
         [UnityTest]
         public IEnumerator ActionAsync()
         {
-            Downloader.MaxRetryTimes = 3;
-            Downloader.MaxDownloads = 5;
+            Assets.MaxRetryTimes = 3;
+            Assets.MaxDownloads = 5;
             Downloader.CreateHandler = request => new DownloadHandlerUWR(request);
             Downloader.Pause(); 
 

@@ -5,21 +5,19 @@ using UnityEngine;
 namespace xasset.editor
 {
     [Serializable]
-    public class BuildRecord
+    public class ChangeRecord
     {
         public string name;
-        public string platform;
         public string[] changes;
         public ulong size;
         public long timestamp;
     }
 
-    public class BuildRecords : ScriptableObject, ISerializationCallbackReceiver
+    public class Changes : ScriptableObject, ISerializationCallbackReceiver
     {
-        public static string Filename = "BuildRecords.json";
-        public List<BuildRecord> data = new List<BuildRecord>();
-
-        private Dictionary<string, BuildRecord> _data = new Dictionary<string, BuildRecord>();
+        public const string Filename = "changes.json";
+        public List<ChangeRecord> data = new List<ChangeRecord>();
+        private readonly Dictionary<string, ChangeRecord> _data = new Dictionary<string, ChangeRecord>();
 
         public void OnBeforeSerialize()
         {
@@ -38,7 +36,7 @@ namespace xasset.editor
         {
             if (!_data.TryGetValue(file, out var value))
             {
-                value = new BuildRecord()
+                value = new ChangeRecord()
                 {
                     name = file,
                     changes = changes,
@@ -54,7 +52,7 @@ namespace xasset.editor
             }
         }
 
-        public bool TryGetValue(string file, out BuildRecord value)
+        public bool TryGetValue(string file, out ChangeRecord value)
         {
             return _data.TryGetValue(file, out value);
         }

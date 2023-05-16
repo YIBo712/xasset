@@ -8,70 +8,9 @@ using Object = UnityEngine.Object;
 
 namespace xasset.editor
 {
-    public enum PlayerAssetsSplitMode
+    [Serializable]
+    public class PlayerConfiguration
     {
-        SplitByAssetPacksWithInstallTime,
-        IncludeAllAssets,
-        ExcludeAllAssets
-    }
-
-    [CreateAssetMenu(fileName = nameof(Settings), menuName = "xasset/" + nameof(Settings))]
-    public class Settings : ScriptableObject
-    {
-        /// <summary>
-        ///     更新信息地址
-        /// </summary>
-        [Header("Player")] [Tooltip("更新信息地址")] public string updateInfoURL = "http://127.0.0.1/";
-
-        /// <summary>
-        ///     资源下载地址
-        /// </summary>
-        [Tooltip("资源下载地址")] public string bundleDownloadURL = "http://127.0.0.1/Bundles";
-
-        /// <summary>
-        ///     安装包下载地址
-        /// </summary>
-        [Tooltip("安装包下载地址")] public string playerDownloadURL = "http://127.0.0.1/Build/xasset.apk";
-
-        /// <summary>
-        ///     安装包资源分包模式
-        /// </summary>
-        [Tooltip("安装包资源分包模式")]
-        public PlayerAssetsSplitMode playerAssetsSplitMode = PlayerAssetsSplitMode.IncludeAllAssets;
-
-        /// <summary>
-        ///     是否将安装包内的资源二次打包，Android 设备上开启这个选项可以优化 IO 效率。
-        /// </summary>
-        [Tooltip("是否将安装包内的资源二次打包，Android 设备上开启这个选项可以优化 IO 效率")]
-        public bool packPlayerAssets = true;
-
-        /// <summary>
-        ///     离线模式，运行时有效，开启后不会触发更新。
-        /// </summary>
-        [Tooltip("离线模式，运行时有效，开启后不会触发更新。")] public bool offlineMode;
-
-        /// <summary>
-        ///     日志级别
-        /// </summary>
-        [Tooltip("日志级别")] public LogLevel logLevel = LogLevel.Debug;
-
-        /// <summary>
-        ///     打包 bundle 的设置
-        /// </summary>
-        [Tooltip("打包 bundle 的设置")] public BundleSettings bundle = new BundleSettings();
-
-        /// <summary>
-        ///     编辑器仿真模式，开启后，无需打包可以进入播放模式。
-        /// </summary>
-        [Header("Development")] [Tooltip("编辑器仿真模式，开启后，无需打包可以进入播放模式")]
-        public bool simulationMode = true;
-
-        /// <summary>
-        ///     编辑器下是否开启仿真下载模式，开启后，无需把资源部署到服务器，就行运行真机的更新过程。
-        /// </summary>
-        [Tooltip("编辑器下是否开启仿真下载模式，开启后，无需把资源部署到服务器，就行运行真机的更新过程")]
-        public bool simulationDownload = true;
-
         /// <summary>
         ///     编辑器仿真模式下，是否采集所有资源，需要更长的初始化耗时，但是可以及时对未采集的内容进行预警。
         /// </summary>
@@ -79,10 +18,51 @@ namespace xasset.editor
         public bool collectAllAssets;
 
         /// <summary>
+        ///     编辑器仿真模式，未开启更新时，开启后，无需打包可以进入播放模式，开启更新时，开启后，无需把资源部署到服务器，就行运行真机的更新过程。
+        /// </summary>
+        [Tooltip("编辑器仿真模式，未开启更新时，开启后，无需打包可以进入播放模式，开启更新时，开启后，无需把资源部署到服务器，就行运行真机的更新过程。")]
+        public bool simulationMode = true;
+
+        /// <summary>
+        ///     是否开启更新，运行时有效。
+        /// </summary>
+        [Tooltip("是否开启更新，运行时有效。")] public bool updatable;
+
+        /// <summary>
+        ///     更新信息地址
+        /// </summary>
+        [Tooltip("更新信息地址")] public string updateInfoURL = "http://127.0.0.1/";
+
+        /// <summary>
+        ///     资源下载地址
+        /// </summary>
+        [Tooltip("资源下载地址")] public string downloadURL = "http://127.0.0.1/Bundles";
+
+        /// <summary>
+        ///     安装包下载地址
+        /// </summary>
+        [Tooltip("安装包下载地址")] public string playerURL = "http://127.0.0.1/Build/xasset.apk";
+
+        /// <summary>
+        ///     安装包资源分包模式
+        /// </summary>
+        [Tooltip("安装包资源分包模式")] public PlayerAssetsSplitMode splitMode = PlayerAssetsSplitMode.IncludeAllAssets;
+
+        /// <summary>
+        ///     是否将安装包内的资源二次打包，Android 设备上开启这个选项可以优化 IO 效率。
+        /// </summary>
+        [Tooltip("是否将安装包内的资源二次打包，Android 设备上开启这个选项可以优化 IO 效率")]
+        public bool packed = true;
+
+        /// <summary>
+        ///     日志级别
+        /// </summary>
+        [Tooltip("日志级别")] public LogLevel logLevel = LogLevel.Debug;
+
+        /// <summary>
         ///     最大并行下载数量
         /// </summary>
-        [Header("Download")] [Range(1, 10)] [Tooltip("最大并行下载数量")]
-        public byte maxDownloads = 5;
+        [Range(1, 10)] [Tooltip("最大并行下载数量")] public byte maxDownloads = 5;
 
         /// <summary>
         ///     最大错误重试次数
@@ -92,8 +72,13 @@ namespace xasset.editor
         /// <summary>
         ///     每个队列最大单帧更新数量。
         /// </summary>
-        [Header("Scheduler")] [Range(1, 30)] [Tooltip("每个队列最大单帧更新数量")]
+        [Range(1, 30)] [Tooltip("每个队列最大单帧更新数量")]
         public byte maxRequests = 10;
+
+        /// <summary>
+        ///     是否开启自动切片
+        /// </summary>
+        [Tooltip("是否开启自动切片")] public bool autoSlicing = true;
 
         /// <summary>
         ///     自动切片时间，值越大处理的请求数量越多，值越小处理请求的数量越小，可以根据目标帧率分配。
@@ -102,21 +87,104 @@ namespace xasset.editor
         public float autoSliceTimestep = 1 / 16f;
 
         /// <summary>
-        ///     是否开启自动切片
-        /// </summary>
-        [Tooltip("是否开启自动切片")] public bool autoSlicing = true;
-
-        /// <summary>
         ///     自动回收的时间步长
         /// </summary>
-        [Header("Recycler")] [Tooltip("自动回收的时间步长")]
-        public float autoRecycleTimestep = 0.7f;
+        [Tooltip("自动回收的时间步长")] public float autoRecycleTimestep = 0.7f;
+    }
 
+    [Serializable]
+    public class BundleConfiguration
+    {
+        /// <summary>
+        ///     对打包的数据进行混淆
+        /// </summary>
+        [Tooltip("对打包的数据进行混淆")] public bool encryption = true;
+
+        /// <summary>
+        ///     打包时先检查引用关系，如果有异常会弹窗提示。
+        /// </summary>
+        [Tooltip("打包时先检查引用关系，如果有异常会弹窗提示。")] public bool checkReference = true;
+
+        /// <summary>
+        ///     保留 bundle 的名字，开启后 Bundles 目录输出的 bundle 的文件名更直观，否则文件名将只保留 hash。
+        /// </summary>
+        [Tooltip("保留 bundle 的名字，开启后 Bundles 目录输出的 bundle 的文件名更直观，否则文件名将只保留 hash。")]
+        public bool saveBundleName = true;
+
+        /// <summary>
+        ///     按 build 名字分割 bundle 名字，不同 build 的资源打包后会输出到不同文件夹下 当开启 saveBundleName 时有效。
+        /// </summary>
+        [Tooltip("按 build 名字分割 bundle 名字，不同 build 的资源打包后会输出到不同文件夹下 当开启 saveBundleName 时有效。")]
+        public bool splitBundleNameWithBuild = true;
+
+        /// <summary>
+        ///     将所有场景按文件为单位打包。
+        /// </summary>
+        [Tooltip("将所有场景按文件为单位打包。")] public bool packByFileForAllScenes = true;
+
+        /// <summary>
+        ///     将所有 Shader 打包到一起。
+        /// </summary>
+        [Tooltip("将所有 Shader 打包到一起。")] public bool packTogetherForAllShaders = true;
+
+        /// <summary>
+        ///     是否对 AssetPack 中的资源进行二次打包，Android 可以优化加载性能。
+        /// </summary>
+        [Tooltip("是否对 AssetPack 中的资源进行二次打包，Android 可以优化加载性能。")]
+        public bool buildAssetPackAssets;
+
+        /// <summary>
+        ///     强制使用内置管线。
+        /// </summary>
+        [Tooltip("强制使用内置管线。")] public bool forceUseBuiltinPipeline;
+
+        /// <summary>
+        ///     二次打包时，单个 pack 最大的大小。
+        /// </summary>
+        [Tooltip("二次打包时，单个 pack 最大的大小。")] public ulong maxAssetPackSize = 1024 * 1024 * 20;
+
+        /// <summary>
+        ///     bundle 的扩展名
+        /// </summary>
+        [Tooltip("bundle 的扩展名")] public string extension = ".bundle";
+
+        /// <summary>
+        ///     Shader 的后缀
+        /// </summary>
+        [Tooltip("Shader 的后缀")] public List<string> shaders = new List<string>
+            { ".shader", ".shadervariants", ".compute" };
+
+        /// <summary>
+        ///     不参与打包的文件
+        /// </summary>
+        [Tooltip("不参与打包的文件")] public List<string> excludeFiles = new List<string>
+        {
+            ".cs",
+            ".cginc",
+            ".hlsl",
+            ".spriteatlas",
+            ".dll"
+        };
+    }
+
+
+    [CreateAssetMenu(fileName = nameof(Settings), menuName = "xasset/" + nameof(Settings))]
+    public class Settings : ScriptableObject
+    { 
+        /// <summary>
+        ///     播放器设置
+        /// </summary>
+        [Tooltip("播放器设置")] public PlayerConfiguration player = new PlayerConfiguration();
+
+        /// <summary>
+        ///     打包 bundle 的设置
+        /// </summary>
+        [Tooltip("打包 bundle 的设置")] public BundleConfiguration bundle = new BundleConfiguration();
         private static string Filename => $"Assets/xasset/Config/{nameof(Settings)}.asset";
 
-        public static BuildGroup GetAutoGroup()
+        public static Group GetAutoGroup()
         {
-            var group = GetOrCreateAsset<BuildGroup>($"Assets/xasset/Config/Auto.asset");
+            var group = GetOrCreateAsset<Group>($"Assets/xasset/Config/Auto.asset");
             group.bundleMode = BundleMode.PackByCustom;
             group.addressMode = AddressMode.LoadByDependencies;
             return group;
@@ -126,17 +194,22 @@ namespace xasset.editor
         {
             var assets = CreateInstance<PlayerAssets>();
             assets.version = PlayerSettings.bundleVersion;
-            assets.updateInfoURL = $"{updateInfoURL}{Assets.Bundles}/{Platform}/{UpdateInfo.Filename}";
-            assets.downloadURL = $"{bundleDownloadURL}{Assets.Bundles}/{Platform}";
-            assets.offlineMode = offlineMode;
-            assets.maxDownloads = maxDownloads;
-            assets.maxRetryTimes = maxRetryTimes;
-            assets.logLevel = logLevel;
-            assets.maxRequests = maxRequests;
-            assets.autoSliceTimestep = autoSliceTimestep;
-            assets.autoSlicing = autoSlicing;
-            assets.autoRecycleTimestep = autoRecycleTimestep;
-            return assets;
+            assets.updateInfoURL = $"{player.updateInfoURL}/{Platform}/{UpdateInfo.Filename}";
+            assets.downloadURL = $"{player.downloadURL}/{Platform}";
+            assets.updatable = player.updatable;
+            assets.packed = player.packed;
+            assets.maxDownloads = player.maxDownloads;
+            assets.maxRetryTimes = player.maxRetryTimes;
+            assets.splitMode = player.splitMode;
+            assets.logLevel = player.logLevel;
+            assets.maxRequests = player.maxRequests;
+            assets.autoSliceTimestep = player.autoSliceTimestep;
+            assets.autoSlicing = player.autoSlicing;
+            assets.autoRecycleTimestep = player.autoRecycleTimestep;
+            if (Platform != Platform.WebGL) return assets;
+            assets.packed = false;
+            assets.splitMode = PlayerAssetsSplitMode.IncludeAllAssets;
+            return assets; 
         }
 
         public static string PlatformCachePath =>
@@ -243,13 +316,10 @@ namespace xasset.editor
             return builds.ToArray();
         }
 
-        public static BundleSettings BundleSettings => GetDefaultSettings().bundle;
-        public static string extension => BundleSettings.extension;
-
         /// <summary>
         ///     [path, entry, bundle, group, return(bundle)]
         /// </summary>
-        public static Func<string, string, string, BuildGroup, string> customPacker { get; set; } = null;
+        public static Func<string, string, string, Group, string> customPacker { get; set; } = null;
 
         public static Func<string, bool> customFilter { get; set; } = s => true;
 
@@ -316,7 +386,7 @@ namespace xasset.editor
         {
             var settings = GetDefaultSettings().bundle;
 
-            if (settings.packTogetherForAllShaders && settings.shaderExtensions.Exists(assetPath.EndsWith))
+            if (settings.packTogetherForAllShaders && settings.shaders.Exists(assetPath.EndsWith))
                 bundle = "shaders";
 
             if (settings.packByFileForAllScenes && assetPath.EndsWith(".unity"))
@@ -362,21 +432,9 @@ namespace xasset.editor
             }
 
             return BuildAssetCache;
-        }
+        } 
 
-        private static BuildEntryCache BuildEntryCache;
-
-        public static BuildEntryCache GetBuildEntryCache()
-        {
-            if (BuildEntryCache == null)
-            {
-                BuildEntryCache = GetOrCreateAsset<BuildEntryCache>(BuildEntryCache.Filename);
-            }
-
-            return BuildEntryCache;
-        }
-
-        public static BuildAsset[] Collect(BuildGroup group)
+        public static BuildAsset[] Collect(Group group)
         {
             var assets = new List<BuildAsset>();
             if (group.entries == null) return assets.ToArray();
@@ -386,15 +444,41 @@ namespace xasset.editor
             }
 
             return assets.ToArray();
+        } 
+        
+        private static void AddAsset(string assetPath, string entry, Group group, ICollection<BuildAsset> assets)
+        {
+            if (customFilter != null && !customFilter(assetPath)) return;
+            var asset = GetAsset(assetPath);
+            asset.entry = entry;
+            asset.group = group;
+            asset.addressMode = group.addressMode;
+            assets.Add(asset);
         }
 
-        private static void GetAssets(BuildGroup group, Object entry, List<BuildAsset> assets)
+        private static void GetAssets(Group group, Object entry, ICollection<BuildAsset> assets)
         {
             var path = AssetDatabase.GetAssetPath(entry);
             if (string.IsNullOrEmpty(path)) return;
-            var cache = GetBuildEntryCache();
-            var entryAsset = cache.GetEntry(path, group);
-            assets.AddRange(entryAsset.assets);
+            if (Directory.Exists(path))
+            {
+                var guilds = AssetDatabase.FindAssets(group.filter, new[] { path });
+                var set = new HashSet<string>();
+                var exclude = GetDefaultSettings().bundle.excludeFiles;
+                foreach (var guild in guilds)
+                {
+                    var child = AssetDatabase.GUIDToAssetPath(guild);
+                    if (string.IsNullOrEmpty(child) || exclude.Exists(child.EndsWith)
+                                                    || Directory.Exists(child)
+                                                    || set.Contains(child)) continue;
+                    set.Add(child);
+                    AddAsset(child, path, group, assets);
+                }
+            }
+            else
+            {
+                AddAsset(path, path, group, assets);
+            }
         }
     }
 }

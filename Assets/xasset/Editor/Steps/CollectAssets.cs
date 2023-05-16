@@ -4,7 +4,7 @@ using UnityEditor;
 
 namespace xasset.editor
 {
-    public class CollectAssets : IBuildJobStep
+    public class CollectAssets : IBuildStep
     {
         public void Start(BuildJob job)
         {

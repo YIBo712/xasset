@@ -13,8 +13,8 @@ namespace xasset.editor
     }
 
 
-    [CreateAssetMenu(menuName = "xasset/" + nameof(BuildGroup), fileName = nameof(BuildGroup))]
-    public class BuildGroup : ScriptableObject
+    [CreateAssetMenu(menuName = "xasset/" + nameof(Group), fileName = nameof(Group))]
+    public class Group : ScriptableObject
     {
         public BundleMode bundleMode = BundleMode.PackByFile;
         public AddressMode addressMode = AddressMode.LoadByPath;

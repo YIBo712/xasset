@@ -18,7 +18,7 @@ namespace xasset.editor
         public void OnAfterDeserialize()
         {
             foreach (var asset in data) _data[asset.path] = asset;
-        } 
+        }
 
         public BuildAsset GetAsset(string path)
         {
@@ -43,7 +43,7 @@ namespace xasset.editor
         private static ulong GetAssetSize(string path)
         {
             var file = new FileInfo(path);
-            return (ulong) (file.Exists ? file.Length : 0);
+            return (ulong)(file.Exists ? file.Length : 0);
         }
 
         private void BuildDependenciesIfNeed(BuildAsset asset)

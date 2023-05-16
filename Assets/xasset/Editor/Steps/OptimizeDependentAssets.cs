@@ -4,7 +4,7 @@ using System.Text;
 
 namespace xasset.editor
 {
-    public class OptimizeDependentAssets : IBuildJobStep
+    public class OptimizeDependentAssets : IBuildStep
     {
         public void Start(BuildJob job)
         {

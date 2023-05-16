@@ -8,6 +8,7 @@ namespace xasset
 {
     public static class Assets
     {
+        public const string kBundlesVersions = "kBundlesVersions";
         public const string Bundles = "Bundles";
         public static readonly System.Version APIVersion = new System.Version(2023, 1, 0);
         public static string UpdateInfoURL { get; set; }
@@ -15,12 +16,19 @@ namespace xasset
         public static Versions Versions { get; set; } = ScriptableObject.CreateInstance<Versions>();
         public static PlayerAssets PlayerAssets { get; set; } = ScriptableObject.CreateInstance<PlayerAssets>();
         public static bool SimulationMode { get; set; }
-        public static bool OfflineMode { get; set; } = true;
+        public static bool Updatable { get; set; } = true;
         public static Platform Platform { get; set; } = Utility.GetPlatform();
         public static bool IsWebGLPlatform => Platform == Platform.WebGL;
         public static string Protocol { get; } = Utility.GetProtocol();
         public static string PlayerDataPath { get; set; } = $"{Application.streamingAssetsPath}/{Bundles}";
         public static string DownloadDataPath { get; set; } = $"{Application.persistentDataPath}/{Bundles}";
+
+        public static Func<string, bool> ContainsFunc { get; set; } = ContainsRuntime;
+
+        private static bool ContainsRuntime(string path)
+        {
+            return Versions.data.Exists(version => version.manifest.ContainsAsset(path));
+        }
 
         public static InitializeRequest InitializeAsync(Action<Request> completed = null)
         {
@@ -87,12 +95,7 @@ namespace xasset
 
         public static bool Contains(string path)
         {
-            if (SimulationMode)
-            {
-                return File.Exists(path);
-            }
-
-            return Versions.data.Exists(version => version.manifest.ContainsAsset(path));
+            return ContainsFunc.Invoke(path);
         }
 
         public static bool IsDownloaded(string path)
@@ -111,8 +114,9 @@ namespace xasset
             return true;
         }
 
-        public static bool IsDownloaded(Downloadable item)
+        public static bool IsDownloaded(Downloadable item, bool checkPlayerAssets = true)
         {
+            if (checkPlayerAssets && IsPlayerAsset(item.hash)) return true;
             var path = GetDownloadDataPath(item.file);
             var file = new FileInfo(path);
             return file.Exists && file.Length == (long)item.size;
@@ -120,7 +124,6 @@ namespace xasset
 
         public static bool IsPlayerAsset(string key)
         {
-            if (OfflineMode) return true;
             return PlayerAssets != null && PlayerAssets.Contains(key);
         }
 
@@ -181,27 +184,11 @@ namespace xasset
 
         public static bool TryGetAsset(ref string path, out ManifestAsset asset)
         {
-            GetActualPath(ref path);
-
-            if (!SimulationMode)
-            {
-                if (Versions.TryGetAsset(path, out asset))
-                {
-                    return true;
-                }
-
-                Logger.E($"File not found:{path}.");
-                return false;
-            }
-
-            asset = null;
-            if (File.Exists(path))
-            {
-                return true;
-            }
-
-            Logger.E($"File not found:{path}.");
-            return false;
+            GetActualPath(ref path); 
+            if (!SimulationMode || Updatable)
+                return Versions.TryGetAsset(path, out asset); 
+            asset = null; 
+            return File.Exists(path);
         }
 
         public static ReloadRequest ReloadAsync(Versions versions)
@@ -213,15 +200,15 @@ namespace xasset
 
         public static void LoadPlayerAssets(PlayerAssets settings)
         {
-            if (!Downloader.SimulationMode)
+            if (!SimulationMode)
             {
                 UpdateInfoURL = settings.updateInfoURL;
                 DownloadURL = settings.downloadURL;
             }
 
-            OfflineMode = settings.offlineMode;
-            Downloader.MaxRetryTimes = settings.maxRetryTimes;
-            Downloader.MaxDownloads = settings.maxDownloads;
+            Updatable = settings.updatable;
+            MaxRetryTimes = settings.maxRetryTimes;
+            MaxDownloads = settings.maxDownloads;
             Scheduler.MaxRequests = settings.maxRequests;
             Scheduler.AutoSlicing = settings.autoSlicing;
             Scheduler.AutoSliceTimestep = settings.autoSliceTimestep;
@@ -229,5 +216,8 @@ namespace xasset
             Logger.LogLevel = settings.logLevel;
             PlayerAssets = settings;
         }
+
+        public static byte MaxDownloads { get; set; } = 5;
+        public static byte MaxRetryTimes { get; set; } = 2;
     }
 }

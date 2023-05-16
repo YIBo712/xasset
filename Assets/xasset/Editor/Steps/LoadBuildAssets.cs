@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace xasset.editor
 {
-    public class LoadBuildAssets : IBuildJobStep
+    public class LoadBuildAssets : IBuildStep
     {
         public void Start(BuildJob job)
         {

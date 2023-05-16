@@ -17,7 +17,7 @@ MonoBehaviour:
     bundle: arts/prefabs.bundle
     type: GameObject
     entry: Assets/xasset/Samples/Prefabs
-    lastWriteTime: 133197304060720904
+    lastWriteTime: 133286805366409927
     addressMode: 2
     dependencies: []
     group: {fileID: 11400000, guid: d4c60234e4402234daa6609fa9f05e70, type: 2}
@@ -25,7 +25,7 @@ MonoBehaviour:
     bundle: arts/prefabs.bundle
     type: GameObject
     entry: Assets/xasset/Samples/Prefabs
-    lastWriteTime: 133197304067765817
+    lastWriteTime: 133286805366389982
     addressMode: 2
     dependencies:
     - Assets/xasset/Samples/Prefabs/CycleReferences2.prefab
@@ -34,7 +34,7 @@ MonoBehaviour:
     bundle: arts/prefabs.bundle
     type: GameObject
     entry: Assets/xasset/Samples/Prefabs
-    lastWriteTime: 133197304062177244
+    lastWriteTime: 133286805366399953
     addressMode: 2
     dependencies:
     - Assets/xasset/Samples/Prefabs/CycleReferences1.prefab
@@ -43,7 +43,7 @@ MonoBehaviour:
     bundle: arts/prefabs.bundle
     type: GameObject
     entry: Assets/xasset/Samples/Prefabs
-    lastWriteTime: 133197304061406477
+    lastWriteTime: 133286805366409927
     addressMode: 2
     dependencies:
     - Assets/xasset/Samples/Textures/Borders/Basic/Basic Filled 10px.png
@@ -53,22 +53,22 @@ MonoBehaviour:
     bundle: arts/prefabs.bundle
     type: GameObject
     entry: Assets/xasset/Samples/Prefabs
-    lastWriteTime: 133197304061364574
+    lastWriteTime: 133286805366399953
     addressMode: 2
     dependencies:
-    - Assets/xasset/Samples/Prefabs/Animations/MessageBox.anim
     - Assets/xasset/Samples/Textures/Borders/Basic/Basic Filled 10px.png
-    - Assets/xasset/Samples/Textures/Borders/Basic/Basic Outline 10px - Stroke 8px.png
-    - Assets/xasset/Samples/Shaders/SimpleGrabPassBlur.shader
-    - Assets/xasset/Samples/Textures/Borders/Basic/Basic Outline 10px - Stroke 10px.png
-    - Assets/xasset/Samples/Prefabs/Animations/MessageBox.controller
     - Assets/xasset/Samples/Shaders/UIBlur.mat
+    - Assets/xasset/Samples/Textures/Borders/Basic/Basic Outline 10px - Stroke 10px.png
+    - Assets/xasset/Samples/Shaders/SimpleGrabPassBlur.shader
+    - Assets/xasset/Samples/Prefabs/Animations/MessageBox.controller
+    - Assets/xasset/Samples/Textures/Borders/Basic/Basic Outline 10px - Stroke 8px.png
+    - Assets/xasset/Samples/Prefabs/Animations/MessageBox.anim
     group: {fileID: 11400000, guid: d4c60234e4402234daa6609fa9f05e70, type: 2}
   - path: Assets/xasset/Samples/Scenes/Additive.unity
     bundle: arts/scenes_additive_unity.bundle
     type: SceneAsset
     entry: Assets/xasset/Samples/Scenes
-    lastWriteTime: 133197304061609800
+    lastWriteTime: 133286820090767044
     addressMode: 2
     dependencies:
     - Assets/xasset/Samples/Shaders/Plane.mat
@@ -78,24 +78,23 @@ MonoBehaviour:
     bundle: arts/scenes_checkforupdates_unity.bundle
     type: SceneAsset
     entry: Assets/xasset/Samples/Scenes
-    lastWriteTime: 133267331336196340
+    lastWriteTime: 133286820160437501
     addressMode: 2
     dependencies:
-    - Assets/xasset/Samples/Textures/unity-logo-white.png
-    - Assets/xasset/Samples/Textures/hypergryph.png
-    - Assets/xasset/Samples/Prefabs/Animations/Blink.controller
-    - Assets/xasset/Samples/Textures/jb_beam.png
-    - Assets/xasset/Samples/Prefabs/Animations/Blink.anim
-    - Assets/xasset/Samples/Textures/igg.png
     - Assets/xasset/Samples/Textures/biubiux2.png
     - Assets/xasset/Samples/Textures/PPJT.png
-    - Assets/xasset/Samples/Scenes/CheckForUpdatesSettings.lighting
+    - Assets/xasset/Samples/Textures/hypergryph.png
+    - Assets/xasset/Samples/Prefabs/Animations/Blink.anim
+    - Assets/xasset/Samples/Textures/igg.png
+    - Assets/xasset/Samples/Textures/unity-logo-white.png
+    - Assets/xasset/Samples/Prefabs/Animations/Blink.controller
+    - Assets/xasset/Samples/Textures/jb_beam.png
     group: {fileID: 11400000, guid: b51da1dfcce8de146a1dd352542344fa, type: 2}
   - path: Assets/xasset/Samples/Scenes/Download.unity
     bundle: arts/scenes_download_unity.bundle
     type: SceneAsset
     entry: Assets/xasset/Samples/Scenes
-    lastWriteTime: 133197304061844073
+    lastWriteTime: 133286820090847114
     addressMode: 2
     dependencies:
     - Assets/xasset/Samples/Textures/Borders/Basic/Basic Filled 10px.png
@@ -105,7 +104,7 @@ MonoBehaviour:
     bundle: arts/scenes_loadadditivescene_unity.bundle
     type: SceneAsset
     entry: Assets/xasset/Samples/Scenes
-    lastWriteTime: 133197304062206051
+    lastWriteTime: 133286820090866774
     addressMode: 2
     dependencies:
     - Assets/xasset/Samples/Textures/Borders/Basic/Basic Filled 10px.png
@@ -114,7 +113,7 @@ MonoBehaviour:
     bundle: arts/scenes_loadasset_unity.bundle
     type: SceneAsset
     entry: Assets/xasset/Samples/Scenes
-    lastWriteTime: 133197304062194447
+    lastWriteTime: 133286820090896694
     addressMode: 2
     dependencies:
     - Assets/xasset/Samples/Textures/Borders/Basic/Basic Filled 10px.png
@@ -123,7 +122,7 @@ MonoBehaviour:
     bundle: arts/scenes_menu_unity.bundle
     type: SceneAsset
     entry: Assets/xasset/Samples/Scenes
-    lastWriteTime: 133197304062835522
+    lastWriteTime: 133286820176680093
     addressMode: 2
     dependencies:
     - Assets/xasset/Samples/Textures/Borders/Basic/Basic Filled 10px.png
@@ -135,7 +134,7 @@ MonoBehaviour:
     bundle: arts/scenes_openingdialog_unity.bundle
     type: SceneAsset
     entry: Assets/xasset/Samples/Scenes
-    lastWriteTime: 133197304063123962
+    lastWriteTime: 133286820850684120
     addressMode: 2
     dependencies:
     - Assets/xasset/Samples/Textures/Borders/Basic/Basic Filled 10px.png
@@ -144,7 +143,7 @@ MonoBehaviour:
     bundle: arts/scenes_splash_unity.bundle
     type: SceneAsset
     entry: Assets/xasset/Samples/Scenes
-    lastWriteTime: 133197304062669782
+    lastWriteTime: 133286820850704069
     addressMode: 2
     dependencies:
     - Assets/xasset/Samples/Textures/Logo.png
@@ -153,7 +152,7 @@ MonoBehaviour:
     bundle: arts/shaders.bundle
     type: Shader
     entry: Assets/xasset/Samples/Shaders
-    lastWriteTime: 133197304054729299
+    lastWriteTime: 133286781973023261
     addressMode: 0
     dependencies: []
     group: {fileID: 11400000, guid: 7c6a82dfff178744f96c710bbbf2ffd7, type: 2}

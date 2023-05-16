@@ -44,7 +44,7 @@ namespace xasset.samples
                         string.Format(Constants.Text.TipsNewContent, updateVersion));
                     yield return request;
                     if (request.result == Request.Result.Success)
-                        Application.OpenURL(getUpdateInfoAsync.info.playerDownloadURL);
+                        Application.OpenURL(getUpdateInfoAsync.info.playerURL);
                     Quit();
                     yield break;
                 }

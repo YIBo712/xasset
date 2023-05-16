@@ -11,9 +11,16 @@ namespace xasset.editor
 {
     public static class Builder
     {
+        public const string ErrorFile = "BuildErrors.txt";
+
+        public static bool HasError()
+        {
+            return File.Exists(ErrorFile);
+        }
+
         public static IBuildPipeline BuildPipeline { get; set; } = new BuiltinBuildPipeline();
         public static Action<Build[], Settings> PreprocessBuildBundles { get; set; } = null;
-        public static Action<string[]> PostprocessBuildBundles { get; set; } = null;
+        public static Action<BuildJob[], string[]> PostprocessBuildBundles { get; set; } = null;
 
         public static void BuildBundles(params Build[] builds)
         {
@@ -24,14 +31,13 @@ namespace xasset.editor
         {
             BuildBundlesInternal(true, builds);
         }
-        
+
         private static void ClearBuildCache()
         {
             // 资源依赖发生修改的时候需要重新生成依赖关系。
             var deleted = new[]
             {
-               BuildAssetCache.Filename,
-               BuildEntryCache.Filename
+                BuildAssetCache.Filename,
             };
             foreach (var file in deleted)
             {
@@ -39,7 +45,7 @@ namespace xasset.editor
                 File.Delete(file);
                 File.Delete(file + ".meta");
             }
-            
+
             // 重建 versions，删除不在版本内的文件。
             var versions = Settings.GetDefaultVersions();
             var builds = Settings.FindAssets<Build>();
@@ -84,6 +90,8 @@ namespace xasset.editor
             var watch = new Stopwatch();
             watch.Start();
             var changes = new List<string>();
+            var errors = new List<string>();
+            var jobs = new List<BuildJob>();
             foreach (var asset in assets)
             {
                 var build = AssetDatabase.LoadAssetAtPath<Build>(asset);
@@ -97,9 +105,18 @@ namespace xasset.editor
                             new SaveBuildAssets(), new BuildBundles(), new BuildVersions())
                         : BuildJob.StartNew(parameters, new CollectAssets(), new ClearDuplicateAssets(),
                             new SaveBuildAssets(), new BuildBundles(), new BuildVersions());
+                jobs.Add(task);
                 if (!string.IsNullOrEmpty(task.error))
                 {
-                    Logger.E(task.error);
+                    if (!task.nothingToBuild)
+                    {
+                        Logger.E(task.error);
+                        errors.Add($"Failed to build {task.parameters.name} with error {task.error}.");
+                    }
+                    else
+                    {
+                        Logger.I(task.error);
+                    }
                 }
                 else
                 {
@@ -108,11 +125,13 @@ namespace xasset.editor
                 }
             }
 
+            if (errors.Count > 0)
+                File.WriteAllText(ErrorFile, string.Join("\n", errors));
             watch.Stop();
             Logger.I($"Finish {nameof(BuildBundles)} with {watch.ElapsedMilliseconds / 1000f}s.");
             if (changes.Count <= 0) return;
-            PostprocessBuildBundles?.Invoke(changes.ToArray());
             SaveVersions(changes);
+            PostprocessBuildBundles?.Invoke(jobs.ToArray(), changes.ToArray());
         }
 
         private static void SaveVersions(List<string> changes)
@@ -121,13 +140,12 @@ namespace xasset.editor
             var path = Settings.GetDataPath(versions.GetFilename());
             versions.Save(path);
             changes.Add(path);
-            PostprocessBuildBundles?.Invoke(changes.ToArray());
             var file = new FileInfo(path);
             BuildUpdateInfo(versions, Utility.ComputeHash(path), file.Length);
             // updateInfo.
             var size = GetChanges(changes.ToArray(), versions.GetFilename());
-            var savePath = Settings.GetCachePath(BuildRecords.Filename);
-            var records = Utility.LoadFromFile<BuildRecords>(savePath);
+            var savePath = Settings.GetCachePath(Changes.Filename);
+            var records = Utility.LoadFromFile<Changes>(savePath);
             records.Set(versions.GetFilename(), changes.ToArray(), size);
             var json = JsonUtility.ToJson(records);
             File.WriteAllText(savePath, json);
@@ -136,15 +154,16 @@ namespace xasset.editor
         public static void BuildUpdateInfo(Versions versions, string hash, long size)
         {
             var settings = Settings.GetDefaultSettings();
-            var downloadURL = $"{settings.bundleDownloadURL}{Assets.Bundles}/{Settings.Platform}/";
+            var downloadURL = $"{settings.player.downloadURL}{Assets.Bundles}/{Settings.Platform}/";
             var updateInfoPath = Settings.GetCachePath(UpdateInfo.Filename);
             var updateInfo = Utility.LoadFromFile<UpdateInfo>(updateInfoPath);
             updateInfo.hash = hash;
-            updateInfo.size = (ulong) size;
+            updateInfo.size = (ulong)size;
+            updateInfo.timestamp = versions.timestamp;
             updateInfo.file = versions.GetFilename();
             updateInfo.version = PlayerSettings.bundleVersion;
             updateInfo.downloadURL = downloadURL;
-            updateInfo.playerDownloadURL = settings.playerDownloadURL;
+            updateInfo.playerURL = settings.player.playerURL;
             File.WriteAllText(updateInfoPath, JsonUtility.ToJson(updateInfo));
         }
 
@@ -218,7 +237,7 @@ namespace xasset.editor
         public static ManifestBundle[] GetBundlesInBuild(Settings settings, Versions versions)
         {
             var set = new HashSet<ManifestBundle>();
-            switch (settings.playerAssetsSplitMode)
+            switch (settings.player.splitMode)
             {
                 case PlayerAssetsSplitMode.SplitByAssetPacksWithInstallTime:
                     if (EditorUtility.DisplayDialog("提示", "开源版本不提供分包机制，购买专业版可以解锁这个功能，立即前往？", "确定"))
@@ -252,12 +271,12 @@ namespace xasset.editor
             {
                 var file = new FileInfo(change);
                 if (!file.Exists) continue;
-                size += (ulong) file.Length;
+                size += (ulong)file.Length;
                 files.Add(file);
             }
 
             files.Sort((a, b) => b.Length.CompareTo(a.Length));
-            foreach (var file in files) sb.AppendLine($"{file.FullName}({Utility.FormatBytes((ulong) file.Length)})");
+            foreach (var file in files) sb.AppendLine($"{file.FullName}({Utility.FormatBytes((ulong)file.Length)})");
 
             Logger.I(size > 0
                 ? $"GetChanges from {name} with following files({Utility.FormatBytes(size)}):\n {sb}"
