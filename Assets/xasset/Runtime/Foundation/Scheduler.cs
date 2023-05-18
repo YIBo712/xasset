@@ -11,7 +11,7 @@ namespace xasset
         private static readonly Dictionary<string, RequestQueue> _Queues = new Dictionary<string, RequestQueue>();
         private static readonly List<RequestQueue> Queues = new List<RequestQueue>();
         private static readonly Queue<RequestQueue> Append = new Queue<RequestQueue>();
-        private static float _realtimeSinceStartup;  
+        private static float _realtimeSinceStartup;
         public static bool AutoSlicing { get; set; } = true;
         public static bool Working => Queues.Exists(o => o.working);
 
@@ -22,7 +22,7 @@ namespace xasset
         public static byte MaxRequests { get; set; } = 10;
 
         private void Start()
-        { 
+        {
             DontDestroyOnLoad(gameObject);
         }
 
@@ -31,10 +31,15 @@ namespace xasset
         private void Update()
         {
             _realtimeSinceStartup = Time.realtimeSinceStartup;
-            while (Append.Count > 0)
+            if (Append.Count > 0)
             {
-                var item = Append.Dequeue();
-                Queues.Add(item);
+                while (Append.Count > 0)
+                {
+                    var item = Append.Dequeue();
+                    Queues.Add(item);
+                }
+
+                Queues.Sort((x, y) => x.priority.CompareTo(y.priority));
             }
 
             foreach (var queue in Queues)
@@ -57,7 +62,7 @@ namespace xasset
             var key = request.GetType().Name;
             if (!_Queues.TryGetValue(key, out var queue))
             {
-                queue = new RequestQueue { key = key, maxRequests = MaxRequests };
+                queue = new RequestQueue { key = key, maxRequests = MaxRequests, priority = request.priority };
                 _Queues.Add(key, queue);
                 Append.Enqueue(queue);
                 // TODO: 这里可以考虑给 Request 加个优先级。
