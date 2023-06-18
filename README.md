@@ -60,10 +60,10 @@ xasset 的主要创作者是：
 
 为 xasset 提供好的建议或反馈，可以成为 xasset 的贡献者：
 
+- [EasierLu](https://github.com/EasierLu) +10 点声望
 - [Connor Aaron Roberts](https://github.com/c0nd3v) +10 点声望
 - [xxgamecom](xxgamecom) +10 点声望
 - [roki007](https://github.com/roki007) +5 声望
-- [EasierLu](https://github.com/EasierLu) +5 点声望
 - [Contra]() +5 点声望
 - [郑昊](https://github.com/plussign) +5 点声望
 - [MR.汪](https://github.com/youyouhx) +5 点声望
