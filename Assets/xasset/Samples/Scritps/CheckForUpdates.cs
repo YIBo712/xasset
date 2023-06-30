@@ -69,21 +69,22 @@ namespace xasset.samples
                     if (update.result == Request.Result.Success)
                     {
                         _downloadAsync = getDownloadSizeAsync.DownloadAsync();
-                        yield return Downloading();
-                        if (_downloadAsync.result == DownloadRequestBase.Result.Success)
-                        {
-                            // 清理历史文件
-                            yield return Clearing();
-                            var reload = Assets.ReloadAsync(versions);
-                            while (!reload.isDone)
-                            {
-                                var msg = $"{Constants.Text.Loading}({reload.pos}/{reload.max}) {reload.progress * 100:f2}%";
-                                LoadingScreen.Instance.SetProgress(msg, reload.progress);
-                                yield return null;
-                            }
-                            UpdateVersion();
-                        }
+                        yield return Downloading(); 
                     }
+                }
+
+                if (versions.IsNew(Assets.Versions))
+                {
+                    // 清理历史文件
+                    yield return Clearing();
+                    var reload = Assets.ReloadAsync(versions);
+                    while (!reload.isDone)
+                    {
+                        var msg = $"{Constants.Text.Loading}({reload.pos}/{reload.max}) {reload.progress * 100:f2}%";
+                        LoadingScreen.Instance.SetProgress(msg, reload.progress);
+                        yield return null;
+                    }
+                    UpdateVersion();
                 }
             }
 
